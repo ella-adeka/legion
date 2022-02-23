@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIGITAL CLOCK</title>
+</head>
+<body onload="digitalClock()">
+    <div class="container">
+        <div class="greeting"></div>
+        <div class="clock"></div>
+    </div>
+    <script>
+        const body = document.querySelector('body');
+        const container = document.querySelector('.container');
+        const greeting = document.querySelector('.greeting');
+        const clock = document.querySelector('.clock');
+
+        function digitalClock() {
+            const time = new Date();
+            var hour = doubleDigit(time.getHours());
+            var minute = doubleDigit(time.getMinutes());
+            var second = doubleDigit(time.getSeconds());
+            clock.innerHTML = hour + ":" + minute + ":" + second;
+            setTimeout(digitalClock, 1000);
+
+            if (hour >= 0 && hour<=11) {
+                greeting.innerHTML = "<h3>Good Morning</h3>";
+            } else if(hour >= 12 && hour<=16) {
+                greeting.innerHTML = "<h3>Good Afternoon</h3>";
+            } else{
+                greeting.innerHTML = "<h3>Goodnight</h3>";
+            }
+        } 
+
+        function doubleDigit(i) {
+            if (i<10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+    </script>
+</body>
+</html>
