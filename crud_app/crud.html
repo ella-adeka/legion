@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>CRUD APP</title>
+</head>
+<body>
+    <form id="form1"  method="post">
+        <input type="text" name="name" id="name" placeholder="Name">
+        <input type="number" name="age" id="age" placeholder="Age">
+        <br>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <table class="table table-striped mt-5 text-center">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody class="details_display"></tbody>
+    </table>
+
+    <script>
+        const form = document.querySelector("#form1");
+        const display = document.querySelector(".details_display");
+        const row = document.createElement('tr');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.querySelector("#name").value;
+            const age = document.querySelector("#age").value;
+
+            if (name === '' && age === '') {
+                `<br>`;
+            } else {
+                row.innerHTML = `
+                    <td>${name}</td>
+                    <td>${age}</td>
+                    <td><a href="#" class="deleteItem delete">X</a></td>
+                `;
+
+                display.append(row);
+            };
+
+            deleteRow(e.target);
+            clearFields();
+        });
+
+        function clearFields() {
+            document.querySelector("#name").value = '';
+            document.querySelector("#age").value = '';
+        }
+
+        function deleteRow(el) {
+            if (el.classList.contains('delete')) {
+                el.parentElement.parentElement.remove()
+            }
+            // const deleteItem = document.querySelector(".delete");
+            // const stuffToDelete = deleteItem.parentElement.parentElement;
+            // delete stuffToDelete;
+        }
+
+        
+    </script>
+</body>
+</html>
