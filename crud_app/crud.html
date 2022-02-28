@@ -29,47 +29,57 @@
     </table>
 
     <script>
-        const form = document.querySelector("#form1");
-        const display = document.querySelector(".details_display");
+        const form = document.querySelector('#form1');
+        const display = document.querySelector('.details_display');
         const row = document.createElement('tr');
-        
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const name = document.querySelector("#name").value;
-            const age = document.querySelector("#age").value;
 
-            if (name === '' && age === '') {
+        // User Class
+        class User{
+            constructor(name, age){
+                this.name = name;
+                this.age = age;
+            }
+        }
+
+        class UI{
+            static deleteUser(el){
+                if (el.classList.contains('delete')) {
+                    el.parentElement.parentElement.remove();
+                }
+            }
+
+            static clearFields(){
+                document.querySelector("#name").value = "";
+                document.querySelector("#age").value = "";
+            }
+        }
+
+        form.addEventListener("submit", (e) => {
+            // Prevent default
+            e.preventDefault();
+
+            // 
+            const name = document.querySelector('#name').value;
+            const age = document.querySelector('#age').value;
+
+            // Vaidate form
+            if (name === '' || age === '') {
                 `<br>`;
             } else {
                 row.innerHTML = `
                     <td>${name}</td>
                     <td>${age}</td>
-                    <td><a href="#" class="deleteItem delete">X</a></td>
+                    <td><a href="#" class="delete">X</a></td>
                 `;
 
                 display.append(row);
-            };
-
-            deleteRow(e.target);
-            clearFields();
-        });
-
-        function clearFields() {
-            document.querySelector("#name").value = '';
-            document.querySelector("#age").value = '';
-        }
-
-        function deleteRow(el) {
-            if (el.classList.contains('delete')) {
-                el.parentElement.parentElement.remove()
+                UI.clearFields();
             }
-            // const deleteItem = document.querySelector(".delete");
-            // const stuffToDelete = deleteItem.parentElement.parentElement;
-            // delete stuffToDelete;
-        }
+        })
 
-        
+        display.addEventListener('click', (e) => {
+            UI.deleteUser(e.target);
+        })
     </script>
 </body>
 </html>
