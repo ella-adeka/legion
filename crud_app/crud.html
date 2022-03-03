@@ -31,17 +31,40 @@
     <script>
         const form = document.querySelector('#form1');
         const display = document.querySelector('.details_display');
-        const row = document.createElement('tr');
+        // const row = document.createElement('tr');
 
-        // User Class
-        class User{
-            constructor(name, age){
+        // create User class
+        class User {
+            constructor(name, age) {
                 this.name = name;
                 this.age = age;
             }
         }
 
+        // create UI class to display user, add user, handle delete, and clear fields
         class UI{
+            static displayUser(){
+                // let users; // use this when not using localStorage
+                const users = Store.getUser();
+
+                users.forEach(user => {
+                    UI.addUser(user);
+                });
+
+            }
+
+            static addUser(user){
+                let row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.age}</td>
+                    <td><a href="#" class="delete">X</a></td>
+                `;
+
+                display.append(row);
+            }
+
             static deleteUser(el){
                 if (el.classList.contains('delete')) {
                     el.parentElement.parentElement.remove();
@@ -49,36 +72,76 @@
             }
 
             static clearFields(){
-                document.querySelector("#name").value = "";
-                document.querySelector("#age").value = "";
+                document.querySelector("#name").value = '';
+                document.querySelector("#age").value = '';
             }
         }
 
-        form.addEventListener("submit", (e) => {
-            // Prevent default
-            e.preventDefault();;
+        class Store{
+            static getUser(){
+                let users;
 
-            // 
+                if (localStorage.getItem('users') === null) {
+                    users = [];
+                } else {
+                    users = JSON.parse(localStorage.getItem('users'));
+                }
+
+                return users;
+            }
+
+            static addUserToStore(user){
+                const users = Store.getUser();
+
+                users.push(user);
+
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            static removeUser(age){
+                const users = Store.getUser();
+
+                users.forEach((user, index) => {
+                    if (user.age === age) {
+                        users.splice(index, 1);
+                    }
+                });
+
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        }
+
+        // Display user in the DOM
+        display.addEventListener("DOMContentLoaded", UI.displayUser);
+
+        // Add user
+        form.addEventListener('submit', (e) => {
+            // Prevent default
+            e.preventDefault();
+
+            // Get values from form and save them
             const name = document.querySelector('#name').value;
             const age = document.querySelector('#age').value;
 
-            // Vaidate form
+            // Form validation
             if (name === '' || age === '') {
-                `<br>`;
+                alert("Please fill the form");
             } else {
-                row.innerHTML = `
-                    <td>${name}</td>
-                    <td>${age}</td>
-                    <td><a href="#" class="delete">X</a></td>
-                `;
+                const user = new User(name, age);
 
-                display.append(row);
+                UI.addUser(user);
+                Store.addUserToStore(user);
+
                 UI.clearFields();
             }
         })
 
         display.addEventListener('click', (e) => {
+            // e.target;
+
             UI.deleteUser(e.target);
+
+            Store.removeUser(e.target.parentElement.previousElementSibling.textContent);
         })
     </script>
 </body>
